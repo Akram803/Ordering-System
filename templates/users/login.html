@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %} Login {% endblock title %}
+
+{% block content %}
+
+<div class="header">
+
+            <h1>login here</h1>
+        
+            <form action="" method="POST">
+                {% csrf_token %}
+                <input type="text" placeholder="enter username" name="username" autofocus autocapitalize="none" autocomplete="username" maxlength="150" required id="id_username" >
+                <input type="password" placeholder="enter password" name="password" autocomplete="current-password" required id="id_password" > 
+
+                <input type="submit" value="login">               
+                <a href="">Don't have an Account</a>
+            </form>
+</div>
+    
+{% endblock content %}

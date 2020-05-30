@@ -1,0 +1,29 @@
+{% extends 'posts/base.html' %}
+
+{% block title %} {{ object.title }} | {{block.super}} {% endblock title %}
+
+{% block content %}   
+
+
+<div class="row">
+        <div class="col-sm-6 offset-sm-3">
+        <div class="thumbnail" >
+
+        <h2>{{ object.title }}   </h2>
+            <small>{{object.timestamp|timesince}} ago</small>
+        {{ object.content|linebreaks }}<br>
+        {% if object.image %}
+            <img src='{{ object.image.url }}'  class="img-thumbnail"/>
+        {% endif %}
+
+        <a href="{{object.get_absolute_url}}/edit"> Edit </a><br>
+        <a href="{{object.get_absolute_url}}/delete"> Delete </a>
+
+    </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+    

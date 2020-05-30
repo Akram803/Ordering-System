@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %} Item|{{object.name}} {% endblock title %}
+
+{% block content %}
+
+<div class="jumbotron">
+
+    <h1 class="display-4">{{object.name}}</h1>
+    <div class="row">
+        <div class="col-md-auto">
+            <img src="{{ object.image.url }}" alt="..." class="img-thumbnail">
+        </div>
+        <div class="col">
+            <p> {{ item.description }} </p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <form action="{% url 'menu:add' %}" method="get" target="frame" >
+            <input type="hidden" name="item" value="{{item.id}}">
+            <input type="hidden" name="n" value="1">
+            <button type="submit" class="btn btn-primary">Add to order</button>
+        </form>
+    </div>
+
+</div>
+    
+<iframe name="frame" style="display: none;"></iframe>
+{% endblock content %}

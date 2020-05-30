@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %} Menu | Category {% endblock title %}
+
+{% block content %}
+
+<div class="row ">
+{% for obj in cats_list %}
+        <div class="col text-center">
+
+            <img src="{{ obj.image.url }}" alt="..." class="img-thumbnail">
+            <h3> <a href="{{ obj.get_absolute_url }}"> {{obj.name}} </a> </h3>
+
+        </div>
+    {% cycle ''  '</div><hr/> <div class="row">' %}
+    {% endfor %}
+
+
+
+  
+{% endblock content %}

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %} My Orders {% endblock title %}
+
+{% block content %}
+
+<h1> Order <small>#{{order.time}}</small> </h1>
+<div class="text-center">
+<table class="table table-hover ">
+    <thead>
+        <tr>
+            <th scope="col">Item</th>
+            <th scope="col">Item price</th>
+            <th scope="col">Number</th>
+            <th scope="col"></th>
+            <th scope="col">price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+        <tr>
+            <td><a href="{{item.get_absolute_url}}">{{ item.name }}</a></td>
+            <td>{{item.price}}</td>
+            <td>{{item.number}}</td>
+            <td >
+                <button class="btn btn-primary btn-sm"></button>
+                
+                <button class="btn btn-primary btn-sm"></button>
+            </td>
+            <td>{{item.number}} * {{item.price}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<br>
+
+<h3>Total Price: {{order.total_price}} EG</h3>
+
+{% if not order.submition_time  %}
+    <a href="{% url 'menu:submit-order' order_id=order.id %}">
+        <button type="submit" class="btn btn-primary btn-lg btn-block" > submit </button>
+    </a>
+{% elif order.check_out_time %}
+    <button class="btn btn-primary btn-lg btn-block" > {{order.check_out_time}} </button>
+{% else %}
+    <button class="btn btn-primary btn-lg btn-block" > In Queue </button>
+{% endif %}
+
+</div>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% endblock content %}
