@@ -1,2 +1,2 @@
-# Restaurant Automated Ordering-System
+# Restaurant Automated Ordering-System (Django)
 
