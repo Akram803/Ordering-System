@@ -9,6 +9,8 @@ from menu.views import (
                         OrderListView,
                         OrderItemsListView,
                         submit_order, 
+                        CategoryCreateView,
+                        ItemCreateView
                         )
 
 
@@ -19,7 +21,12 @@ urlpatterns = [
     path('search/', SearchView.as_view(),  name='search'),
 
     path('menu/', CategoryListView.as_view(), name='menu'),
-    path('cat/<slug:cat>',ItemListView.as_view(), name='item-list'),
+    path('category/create',CategoryCreateView.as_view(), name='category-create'),
+    
+    path('<slug:cat>',ItemListView.as_view(), name='item-list'),
+    path('<slug:cat>/additem',ItemCreateView.as_view(), name='item-create'),
+
+    
     path('item/<int:id>',ItemDetailView.as_view(), name='item-details'), 
 
     path('add/', AddItemToOrder.as_view(), name='add' ),

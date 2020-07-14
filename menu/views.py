@@ -1,12 +1,10 @@
-from django.shortcuts import get_object_or_404, render, Http404
-from django.views.generic import View, ListView, DetailView
+from django.shortcuts import Http404, get_object_or_404, redirect, render
+from django.views.generic import View, ListView, DetailView, CreateView
 from menu.models import Category, Item, AnonymouseOrder, AnonymouseOrderItems, CustomerOrder, CustomerorderItems
 from django.http import HttpResponse
 
- 
-# Create your views here.
+from .forms import CategoryCreatForm, ItemCreatForm
 
-# Create your views here.
 
 class HomeView(View):
 
@@ -30,7 +28,7 @@ class CategoryListView(ListView):
     model = Category
     template_name = "menu/category-list.html"
     context_object_name = 'cats_list'
-    paginate_by = 4
+    # paginate_by = 4 
 
     # overwrite
     def get_queryset(self):
@@ -42,6 +40,23 @@ class CategoryListView(ListView):
     #     context = super(ItemListView, self).get_context_data(**kwargs) 
     #     context['cats_list'] = Category.objects.all()
     #     return context
+
+
+class CategoryCreateView(View):
+    model = Category
+    template_name = "menu/catgory-create.html"
+
+    def get(self, request, *args, **kwargs):
+        form = CategoryCreatForm()
+        return render(request, self.template_name, {'form':form})
+
+    def post(self, request, *args, **kwargs):
+        form = CategoryCreatForm(request.POST, request.FILES)
+        if form.is_valid():
+            category = form.save(commit=True)
+            return redirect(category.get_absolute_url())
+
+        return render(request, self.template_name, {'form':form})
 
 class ItemListView(ListView):
     model = Item 
@@ -55,8 +70,11 @@ class ItemListView(ListView):
     #overwrite
     def get_queryset(self):
         # get_list_or_404(Item,category__name__exact=self.kwargs['cat'])
-        queryset = Item.objects.filter(category__name__exact=self.kwargs['cat'])
-        if len(queryset) > 0:
+        queryset = Item.objects.filter(category__slug__exact=self.kwargs['cat'])
+       
+        if len(queryset) > 0 or \
+           self.request.user.is_staff or \
+           self.request.user.is_superuser:
             return queryset
         else:
             raise Http404
@@ -67,6 +85,26 @@ class ItemListView(ListView):
         context['this_cat'] = self.kwargs['cat']
         common.get_cats(context)
         return context
+
+class ItemCreateView(View):
+    model = Item
+    template_name = "menu/item-create.html"
+
+    def get(self, request, *args, **kwargs):
+        form = ItemCreatForm()
+        return render(request, self.template_name, {'form':form})
+
+    def post(self, request, *args, **kwargs):
+        form = ItemCreatForm(request.POST, request.FILES)
+        if form.is_valid():
+            item = form.save(commit=False)
+            category = Category.objects.get(slug__exact=self.kwargs.get("cat"))
+            item.category = category
+            item.save()
+
+            return redirect(item.get_absolute_url())
+
+        return render(request, self.template_name, {'form':form})
 
 class ItemDetailView(DetailView):
     model = Item
@@ -233,7 +271,7 @@ def submit_order(request, order_id):
 
 class common():
     @classmethod
-    def get_cats(self,context):
+    def get_cats(cls, context):
         context['cats_list'] = Category.objects.all()
 
 

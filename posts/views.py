@@ -7,6 +7,8 @@ from django.core.paginator import Paginator
 from .models import Post
 from .forms import PostForm
 
+from urllib.parse import quote_plus
+
 # Create your views here.
 # ______________________CREATE__________________________
 class PostCreatView(View): 
@@ -32,14 +34,20 @@ class PostDetailView(View):
     
     def get(self, request, *args, **kwargs):
 
-        return render(request, self.template, { 'object': self.get_queryset})
+        return render(request, self.template, self.get_context_data())
 
     def post(self, request, *args, **kwargs):
         return HttpResponse('POST request!')
 
-    def get_queryset(self):
+    def get_context_data(self):
+        context = {}
         _id = self.kwargs.get('id')
-        return get_object_or_404(Post, id=_id)
+        context["object"] = get_object_or_404(Post, id=_id)
+
+        context["share_str"] = quote_plus(context["object"].content)
+
+        return context
+
     
 # ------------------------------------------------------
 # ______________________LIST____________________________

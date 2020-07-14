@@ -1,5 +1,5 @@
 from django.urls import path
-from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.views import LoginView, LogoutView 
 from .views import register, StuffOrderListView
 
 app_name = "stuff"
@@ -11,4 +11,4 @@ urlpatterns = [
     path('order-list/', StuffOrderListView.as_view(), name='order-list')
 
 
-]  
+]   

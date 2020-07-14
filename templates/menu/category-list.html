@@ -4,9 +4,15 @@
 
 {% block content %}
 
+{% if request.user.is_staff or request.user.is_superuser %}
+    <a href="{% url 'menu:category-create' %}" class="btn btn-sm btn-success">add category <span class="glyphicon glyphicon-plus-sign"></span></a>
+    <br>
+    <br>
+{% endif %}
+
 <div class="row ">
-{% for obj in cats_list %}
-        <div class="col text-center">
+    {% for obj in cats_list %}
+        <div class="col-md-6 text-center">
 
             <img src="{{ obj.image.url }}" alt="..." class="img-thumbnail">
             <h3> <a href="{{ obj.get_absolute_url }}"> {{obj.name}} </a> </h3>
@@ -14,8 +20,13 @@
         </div>
     {% cycle ''  '</div><hr/> <div class="row">' %}
     {% endfor %}
+ 
+    
 
-
+    
+    
+        
+    
 
   
 {% endblock content %}

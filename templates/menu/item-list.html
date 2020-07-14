@@ -4,14 +4,23 @@
 
 {% block content %}
 
+    {% if this_cat %}
+    {% if request.user.is_staff or request.user.is_superuser %}
+        <a href="{% url 'menu:item-create' cat=this_cat %}" class="btn btn-sm btn-success">add Item <span class="glyphicon glyphicon-plus-sign"></span></a>
+        <br>
+        <br>
+    {% endif %}
+    {% endif %}
+    
+
 <div class="row ">
 {% for item in items_list %}
-    <div class="col text-center">
+    <div class="col-md-6 text-center">
 
         <img src="{{ item.image.url }}" alt="..." class="img-thumbnail">
         <h3> <a href="{{ item.get_absolute_url }}"> {{item.name}} </a> </h3>
         <a href="{{ item.category.get_absolute_url }}"> {{item.category}} </a>
-        <p> {{item.description|truncatechars:90}} </p>
+        <p> {{item.description|truncatechars:50}} </p>
         <p> {{item.price}} EG </P>
         <form action="{% url 'menu:add' %}" method="get" target="frame">
             <input type="hidden" name="item" value="{{item.id}}">
@@ -21,8 +30,10 @@
 
     </div> 
     {% cycle ''  '</div><hr/> <div class="row">' %}
-{% endfor %}
-</div>
+    {% endfor %}
+    </div>
+
+
 
 <iframe name="frame" style="display: none;"></iframe>
 {% endblock content %}
